@@ -1,5 +1,3 @@
-package ru.algorithmist.jquant;
-
 import ru.algorithmist.jquant.math.GrangerTest;
 import ru.algorithmist.jquant.math.GrangerTestResult;
 

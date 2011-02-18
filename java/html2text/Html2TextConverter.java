@@ -1,4 +1,4 @@
-/*
+package html2text;/*
  * Copyright (c) 2011, Sergey Edunov. All Rights Reserved.
  *
  * This file is part of JQuant library.

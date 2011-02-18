@@ -1,5 +1,3 @@
-package ru.algorithmist.jquant;
-
 import org.apache.commons.lang.time.FastDateFormat;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.DateTimeFormatter;
