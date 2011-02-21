@@ -1,5 +1,5 @@
-import ru.algorithmist.jquant.math.GrangerTest;
-import ru.algorithmist.jquant.math.GrangerTestResult;
+//import ru.algorithmist.jquant.math.GrangerTest;
+//import ru.algorithmist.jquant.math.GrangerTestResult;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,11 +30,11 @@ public class EggsTest {
             eggs.add(egg);
             chics.add(chic);
         }
-        double[] deggs = GrangerCausalitySample.tod(eggs);
-        double[] dchics = GrangerCausalitySample.tod(chics);
+//        double[] deggs = GrangerCausalitySample.tod(eggs);
+//        double[] dchics = GrangerCausalitySample.tod(chics);
 
-        printTable(deggs, dchics);
-        printTable(dchics, deggs);
+//        printTable(deggs, dchics);
+//        printTable(dchics, deggs);
 
     }
 
@@ -42,11 +42,11 @@ public class EggsTest {
         System.out.println("<table border=\"1\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-collapse: collapse;\">");
         System.out.println("<tr><td> Лаг </td><td>F-statistics</td><td>P-value</td><td>R<sup>2</sup></td></tr>");
         for(int l = 1; l<=4; l++){
-            GrangerTestResult result = GrangerTest.granger(x, y, l);
-            System.out.println("<tr><td> " + l +
-                    " </td><td> " +  result.getFStat() +
-                    " </td><td> " + result.getPValue() +
-                    " </td><td> " + result.getR2() +  " </td></tr>");
+//            GrangerTestResult result = GrangerTest.granger(x, y, l);
+//            System.out.println("<tr><td> " + l +
+//                    " </td><td> " +  result.getFStat() +
+//                    " </td><td> " + result.getPValue() +
+//                    " </td><td> " + result.getR2() +  " </td></tr>");
         }
         System.out.println("</table>");
     }

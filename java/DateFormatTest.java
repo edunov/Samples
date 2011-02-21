@@ -1,4 +1,4 @@
-import org.apache.commons.lang.time.FastDateFormat;
+//import org.apache.commons.lang.time.FastDateFormat;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormat;
@@ -172,7 +172,7 @@ public class DateFormatTest {
     }
 
     private static class ApacheDateFormat implements IDateFormat{
-        private FastDateFormat format = FastDateFormat.getInstance(FORMAT);
+//        private FastDateFormat format = FastDateFormat.getInstance(FORMAT);
 
         @Override
         public Date parse(String str) throws ParseException {
@@ -181,7 +181,8 @@ public class DateFormatTest {
 
         @Override
         public String format(Date date) {
-            return format.format(date);
+//            return format.format(date);
+            return null;
         }
     }
 
