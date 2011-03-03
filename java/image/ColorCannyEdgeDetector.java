@@ -1,6 +1,8 @@
 package image;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 import java.util.Stack;
 
 /**
@@ -33,14 +35,26 @@ public class ColorCannyEdgeDetector {
     double gaussianKernelRadius = 1;
     int gaussianKernelWidth = 16;
     private static final double lowThreshold = 3;
-    private static final double highThreshold = 8;
+    private static final double highThreshold = 7;
 
-    public ColorCannyEdgeDetector(int W, int H, int[] r, int[] g, int[] b){
-        this.W = W;
-        this.H = H;
-        this.r = r;
-        this.g = g;
-        this.b = b;
+    public ColorCannyEdgeDetector(BufferedImage image){
+
+        this.W = image.getWidth();
+        this.H = image.getHeight();
+        int p = 0;
+        r = new int[W*H];
+        g = new int[W*H];
+        b = new int[W*H];
+
+        for(int x=0; x<W; x++){
+            for(int y=0; y<H; y++){
+                int rgb = image.getRGB(x, y);
+                r[p] = (rgb >> 16)&0xff;
+                g[p] = (rgb >> 8)&0xff;
+                b[p++] = rgb&0xff;
+            }
+        }
+
         yrConv = new double[r.length];
         xrConv = new double[r.length];
         ygConv = new double[r.length];
@@ -58,13 +72,32 @@ public class ColorCannyEdgeDetector {
     }
 
 
-    public int[] findEdges() {
+
+
+    public BufferedImage findEdges() {
         computeColorGradients(gaussianKernelRadius, gaussianKernelWidth);
         double low = lowThreshold;
         double high = highThreshold;
         hysterezis(low, high);
         threshold();
-        return data;
+//        double max = 0;
+//        for(int i=0; i<magnitude.length; i++){
+//            max = Math.max(max, magnitude[i]);
+//        }
+//        for(int i=0; i<data.length; i++){
+//            data[i] = (int) (255 * magnitude[i] / max);
+//        }
+        return image(data, data, data, W, H);
+    }
+
+    private static BufferedImage image(int[] r, int[] g, int[] b, int W, int H) {
+        BufferedImage image = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
+        for(int y=0; y<H; y++){
+            for(int x=0; x<W; x++){
+                image.setRGB(x, y, r[x*H+y]<<16 | g[x*H+y]<<8 | b[x*H+y]);
+            }
+        }
+        return image;
     }
 
     private void computeColorGradients(double kernelRadius, int kernelWidth) {
@@ -181,17 +214,20 @@ public class ColorCannyEdgeDetector {
                     h = a1;
                     v = a9;
                 } else {
-                    h = 1000000;
-                    v = 1000000;
+                   throw new RuntimeException("Incorrect angle");
                 }
 
                 double val = 0;
-                if (a5 > h && a5 > v)
+                if (a5 > h && a5 >= v)
                     val = a5;
 
                 magnitude[x * H + y] = val;
             }
         }
+    }
+
+    private static int conv(byte col) {
+        return col >= 0 ? col : (int) col + 256;
     }
 
     private void hysterezis(double low, double high) {
@@ -228,7 +264,7 @@ public class ColorCannyEdgeDetector {
             for (int x = x0; x <= x2; x++) {
                 for (int y = y0; y <= y2; y++) {
                     if ((y != y1 || x != x1) && data[x * H + y] == 0 && magnitude[x * H + y] >= threshold) {
-                        data[x*H+y] = (int) magnitude[x*H+y];
+                        data[x*H+y] = (int) magnitude[x*H+y] + 1;
                         stack.push(new Point(x, y));
                     }
                 }
