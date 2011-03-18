@@ -4,13 +4,13 @@
 "parseQuotes" <-
 function(From)
 {
-    require(xts) #загрузить модуль xts, он нам нужен
-    fr <- read.csv(From, as.is = TRUE) #читаем данные из файла
+    require(xts) #Р·Р°РіСЂСѓР·РёС‚СЊ РјРѕРґСѓР»СЊ xts, РѕРЅ РЅР°Рј РЅСѓР¶РµРЅ
+    fr <- read.csv(From, as.is = TRUE) #С‡РёС‚Р°РµРј РґР°РЅРЅС‹Рµ РёР· С„Р°Р№Р»Р°
     fr <- xts(as.matrix(fr[,(5:9)]), as.Date(strptime(fr[,3], "%Y%m%d")))
-    # функция strptime позволяет нам распарсить дату в заданном формате, в данном случае формат определяется выражением "%Y%m%d"
-    # для интрадей данных последнюю строчку надо заменить на
+    # С„СѓРЅРєС†РёСЏ strptime РїРѕР·РІРѕР»СЏРµС‚ РЅР°Рј СЂР°СЃРїР°СЂСЃРёС‚СЊ РґР°С‚Сѓ РІ Р·Р°РґР°РЅРЅРѕРј С„РѕСЂРјР°С‚Рµ, РІ РґР°РЅРЅРѕРј СЃР»СѓС‡Р°Рµ С„РѕСЂРјР°С‚ РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ РІС‹СЂР°Р¶РµРЅРёРµРј "%Y%m%d"
+    # РґР»СЏ РёРЅС‚СЂР°РґРµР№ РґР°РЅРЅС‹С… РїРѕСЃР»РµРґРЅСЋСЋ СЃС‚СЂРѕС‡РєСѓ РЅР°РґРѕ Р·Р°РјРµРЅРёС‚СЊ РЅР°
 #fr&lt;-xts(as.matrix(fr[,(4:9)]),as.POSIXct(strptime(paste(fr[,3],fr[,4]), "%Y%m%d %H%M%S")))
-    colnames(fr) <- c('Open','High','Low','Close','Volume') #присваивамем новые имена колонам для совместимости с xts
+    colnames(fr) <- c('Open','High','Low','Close','Volume') #РїСЂРёСЃРІР°РёРІР°РјРµРј РЅРѕРІС‹Рµ РёРјРµРЅР° РєРѕР»РѕРЅР°Рј РґР»СЏ СЃРѕРІРјРµСЃС‚РёРјРѕСЃС‚Рё СЃ xts
     return(fr)
 }
 
@@ -20,7 +20,7 @@ function(From)
 
 require(quantmod)
 
-rsi =  RSI(Cl(data), n=period) #К счастью для нас индикатор RSI уже реализован в модуле TTR
+rsi = RSI(Cl(data), n=period) #Рљ СЃС‡Р°СЃС‚СЊСЋ РґР»СЏ РЅР°СЃ РёРЅРґРёРєР°С‚РѕСЂ RSI СѓР¶Рµ СЂРµР°Р»РёР·РѕРІР°РЅ РІ РјРѕРґСѓР»Рµ TTR
 
 ymin=min(Lo(data))
 ymax=max(Lo(data))
@@ -36,8 +36,8 @@ sigup <-ifelse(rsi < low,1,0)
 sigdn <-ifelse(rsi > high,-1,0)
 
 
-sigup <- lag(sigup,1) 
-sigdn <- lag(sigdn,1) 
+sigup <- lag(sigup,1)
+sigdn <- lag(sigdn,1)
 
 sigup[is.na(sigup)] <- 0
 sigdn[is.na(sigdn)] <- 0
@@ -54,26 +54,26 @@ eq_all <- cumprod(1+ret*sig)
 
 
 mfg=c(1,2)
-plot(eq_up,main="Доходность длинных позиций",col="green")
+plot(eq_up,main="Р”РѕС…РѕРґРЅРѕСЃС‚СЊ РґР»РёРЅРЅС‹С… РїРѕР·РёС†РёР№",col="green")
 mfg=c(2,2)
-plot(eq_all,main="Общая доходность",col="blue")
+plot(eq_all,main="РћР±С‰Р°СЏ РґРѕС…РѕРґРЅРѕСЃС‚СЊ",col="blue")
 mfg=c(2,1)
-plot(eq_dn,main="Доходность коротких позиций",col="red")
-title("Торговая система основанная на RSI (www.algorithmist.ru)", outer = TRUE)
+plot(eq_dn,main="Р”РѕС…РѕРґРЅРѕСЃС‚СЊ РєРѕСЂРѕС‚РєРёС… РїРѕР·РёС†РёР№",col="red")
+title("РўРѕСЂРіРѕРІР°СЏ СЃРёСЃС‚РµРјР° РѕСЃРЅРѕРІР°РЅРЅР°СЏ РЅР° RSI (www.algorithmist.ru)", outer = TRUE)
 
-print(paste("Средняя дневная прибыль %", mean(ret*sig)*100, mean(ret*sigup)*100, mean(ret*sigdn)*100))
-print(paste("Среднеквадратичное отклонение от прибыли %", sd(ret*sig)*100, sd(ret*sigup)*100, sd(ret*sigdn)*100))
-print(paste("Всего сигналов", sum(abs(sig)), sum(sigup), sum(abs(sigdn))))
+print(paste("РЎСЂРµРґРЅСЏСЏ РґРЅРµРІРЅР°СЏ РїСЂРёР±С‹Р»СЊ %", mean(ret*sig)*100, mean(ret*sigup)*100, mean(ret*sigdn)*100))
+print(paste("РЎСЂРµРґРЅРµРєРІР°РґСЂР°С‚РёС‡РЅРѕРµ РѕС‚РєР»РѕРЅРµРЅРёРµ РѕС‚ РїСЂРёР±С‹Р»Рё %", sd(ret*sig)*100, sd(ret*sigup)*100, sd(ret*sigdn)*100))
+print(paste("Р’СЃРµРіРѕ СЃРёРіРЅР°Р»РѕРІ", sum(abs(sig)), sum(sigup), sum(abs(sigdn))))
 
-print(paste("% удачных дней", sum(ifelse(ret*sig > 0 ,1,0))*100 / sum(abs(sig)) , sum(ifelse(ret*sigup>0 ,1,0))*100 / sum(sigup), sum(ifelse(ret*sigdn>0 ,1,0))*100 / sum(abs(sigdn))))
+print(paste("% СѓРґР°С‡РЅС‹С… РґРЅРµР№", sum(ifelse(ret*sig > 0 ,1,0))*100 / sum(abs(sig)) , sum(ifelse(ret*sigup>0 ,1,0))*100 / sum(sigup), sum(ifelse(ret*sigdn>0 ,1,0))*100 / sum(abs(sigdn))))
 
-print(paste("Максимальная просадка %", max((cummax(eq_all)-eq_all)/cummax(eq_all)) *100)) 
+print(paste("РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РїСЂРѕСЃР°РґРєР° %", max((cummax(eq_all)-eq_all)/cummax(eq_all)) *100))
 
 income <- last(SMA(ret*sig, n=5), n=1000)
 
 }
 
-#Данные следует качать отсюда http://www.finam.ru/analysis/export/default.asp
+#Р”Р°РЅРЅС‹Рµ СЃР»РµРґСѓРµС‚ РєР°С‡Р°С‚СЊ РѕС‚СЃСЋРґР° http://www.finam.ru/analysis/export/default.asp
 
 MICEX <- parseQuotes("C:\\data\\MICEX_050317_110317.txt")
 GAZP <- parseQuotes("C:\\data\\GAZP_050317_110317.txt")
