@@ -1,4 +1,4 @@
-require(quantmod)
+﻿require(quantmod)
 
 
 "parseQuotes" <-
